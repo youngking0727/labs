@@ -15,6 +15,8 @@ import tqdm
 
 import echonet
 
+
+
 def run(num_epochs=45,
         modelname="r2plus1d_18",
         tasks="logBNP",
@@ -194,7 +196,7 @@ def run(num_epochs=45,
                 output += "_{}".format(root.replace("/", "_"))
             if video_dir != "Videos":
                 output += "_{}".format(video_dir.replace("/", "_"))
-        output = os.path.join("/oak/stanford/groups/jamesz/jwhughes/output/video", output)
+        output = os.path.join("/home/yangkai/project/labs/output/video", output)
     os.makedirs(output, exist_ok=True)
     print(output)
 
@@ -227,9 +229,13 @@ def run(num_epochs=45,
     else:
         last_layer.bias.data = torch.from_numpy(target_mean)
 
+    # 打印模型结构
+    print(model)
+
     if initialize_from:
         last_layer.bias.data = last_layer.bias.data[0]
 
+    # 把训练集的参数copy到验证集，顺便换一下
     kwargs = {"target_type": tasks,
               "mean": mean,
               "std": std,

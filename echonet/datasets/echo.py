@@ -112,14 +112,16 @@ class Echo(torch.utils.data.Dataset):
             self.fnames = sorted(os.listdir(self.external_test_location))
         else:
             with open(self.folder / filelist) as f:
+                # 这里把头都读出来了，'FileName', 'EF', 'ESV', 'EDV', 'FrameHeight', 'FrameWidth', 'FPS', 'NumberOfF
                 self.header = f.readline().strip().split(",")
                 self.header = [v.strip('"') for v in self.header]
 
                 if "FileName" in self.header:
-                    filenameIndex = self.header.index("FileName")
+                    filenameIndex = self.header.index("FileName") # 看看"FileName"这个字段在self.header的第几个位置
                 elif "V1" in self.header:
                     filenameIndex = self.header.index("V1")
 
+                # 把Split在列表中的位置拿出来，这个是用来看视频是训练还是验证集的
                 splitIndex = self.header.index("Split")
 
                 i = 0
